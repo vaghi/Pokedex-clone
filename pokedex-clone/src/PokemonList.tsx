@@ -59,7 +59,10 @@ const PokemonList = ({
           {pokemonList
             .slice(
               currentPage * resultsPerPage,
-              (currentPage + 1) * resultsPerPage,
+              Math.min(
+                (currentPage + 1) * resultsPerPage,
+                pokemonList.length - 1,
+              ),
             )
             .map(pokemon => (
               <ListItem

@@ -12,9 +12,6 @@ export const resultsPerPage = 20;
 
 const MainPage = ({}) => {
   const [pokemonList, setPokemonList] = useState<{
-    count: number;
-    next: string;
-    previous: string;
     results: PokemonProps[];
   }>();
 
