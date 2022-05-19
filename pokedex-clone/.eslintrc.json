@@ -31,7 +31,7 @@
             }],
         "eqeqeq": "error",
         "no-console": "warn",
-        "no-unused-vars": "error",
+        "no-unused-vars": "warn",
         "react/react-in-jsx-scope": "off",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn"

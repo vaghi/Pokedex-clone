@@ -1,12 +1,15 @@
-export type PokemonListItemProps = {
-  name: string,
-  url: string
+export type PokemonTypeProps = { type: { name: string } };
+export type PokemonAbilitiesProps = { ability: { name: string } };
+export type PokemonHeldItemsProps = { item: { name: string } };
+
+export type PokemonProps = {
+  name: string;
+  abilities?: PokemonAbilitiesProps[];
+  held_items?: PokemonHeldItemsProps[];
+  height?: number;
+  weight?: number;
+  types?: PokemonTypeProps[];
+  custom?: boolean;
 };
 
-export type PokemonDetailsProps = {
-  name: string,
-  abilities: { ability: { name: string } }[],
-  height: number,
-  weight: number,
-  types: { type: { name: string } }[]
-};
+export type Option = { label: string; value: string };

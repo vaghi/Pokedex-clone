@@ -1,0 +1,19 @@
+.AddPokemonFormContainer {
+  width: 30%;
+  min-width: 200px;
+  margin: auto;
+  padding-top: 30px;
+  padding-bottom: 10px;
+}
+
+.AddPokemonFormContainer .field > input {
+  width: 90% !important;
+}
+
+.FormButtonsContainer {
+  display: flex;
+  width: 30%;
+  margin: auto;
+  justify-content: space-around;
+  padding-bottom: 10px;
+}

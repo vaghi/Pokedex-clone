@@ -1,39 +1,98 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getPokemonDetails } from "./services";
-import { PokemonDetailsProps } from "./types";
+import { PokemonProps } from "./types";
+import { capitalize } from "./utils";
+import "./PokemonDetails.css";
+import "./CommonStyles.css";
+import BackButton from "./assets/back.png";
 
-const PokemonDetails = () => {
+type PokemonDeTailsProps = {
+  customPokemon?: PokemonProps;
+};
+
+const PokemonDetails = ({ customPokemon }: PokemonDeTailsProps) => {
   const { pokemonId } = useParams();
+  const navigate = useNavigate();
 
-  const [pokemonDetails, setPokemonDetails] = useState<PokemonDetailsProps>();
+  const [pokemonDetails, setPokemonDetails] = useState<PokemonProps>();
 
   useEffect(() => {
-    if (pokemonId) {
+    if (pokemonId && !customPokemon) {
       getPokemonDetails(pokemonId).then(res => setPokemonDetails(res));
+    } else if (customPokemon) {
+      setPokemonDetails({
+        ...customPokemon,
+      });
     }
-  }, [pokemonId]);
+  }, [customPokemon, pokemonId]);
 
   if (!pokemonDetails) {
     return null;
   }
 
-  const { name, height, weight, abilities } = pokemonDetails;
+  const {
+    name,
+    height,
+    weight,
+    types,
+    abilities,
+    held_items: heldItems,
+  } = pokemonDetails;
 
   return (
-    <>
-      <h1>{name}</h1>
-      <span>Height: {height}</span>
-      <span>Weight: {weight}</span>
-      <span>Abilities: </span>
-      <ul>
-        {abilities.map(({ ability }) => (
-          <li key={ability.name}>{ability.name}</li>
-        ))}
-      </ul>
-      <a href="/">Back</a>
-    </>
+    <div className="PokemonDetailsContainer">
+      <header className="PokemonDetailsHeader">
+        <h1>{capitalize(name)}</h1>
+      </header>
+      <div className="PokemonDetailsCard">
+        <span>Height: {height || "-"}</span>
+        <br></br>
+        <span>Weight: {weight || "-"}</span>
+        <br></br>
+        <span>Types:</span>
+        {types?.length ? (
+          <ul>
+            {types.map(({ type }) => (
+              <li key={type.name}>{type.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <div className="NoneLabel">none</div>
+        )}
+        <br></br>
+        <span>Abilities: </span>
+        {abilities?.length ? (
+          <ul>
+            {abilities.map(({ ability }) => (
+              <li key={ability.name}>{ability.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <div className="NoneLabel">none</div>
+        )}
+        <br></br>
+        <span>Held Items: </span>
+        {heldItems?.length ? (
+          <ul>
+            {heldItems.map(({ item }) => (
+              <li key={item.name}>{item.name}</li>
+            ))}
+          </ul>
+        ) : (
+          <div className="NoneLabel">none</div>
+        )}
+      </div>
+      <footer className="BackButtonContainer">
+        <img
+          className="PageButton"
+          width={32}
+          src={BackButton}
+          onClick={() => navigate(-1)}
+        />
+      </footer>
+    </div>
   );
 };
 

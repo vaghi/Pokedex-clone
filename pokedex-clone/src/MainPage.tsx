@@ -1,68 +1,76 @@
 import React, { useState, useEffect } from "react";
 import "./MainPage.css";
-import ListItem from "./mainList/ListItem";
-import { getAllPokemons, queryStringToObject } from "./services";
-import { PokemonListItemProps } from "./types";
-import { useSearchParams } from "react-router-dom";
+import "./CommonStyles.css";
+import { getAllPokemons } from "./services";
+import { PokemonProps } from "./types";
+import { Route, Routes } from "react-router-dom";
+import PokemonList from "./PokemonList";
+import AddPokemon from "./AddPokemon";
+import PokemonDetails from "./PokemonDetails";
+
+export const resultsPerPage = 20;
 
 const MainPage = ({}) => {
   const [pokemonList, setPokemonList] = useState<{
     count: number;
     next: string;
     previous: string;
-    results: PokemonListItemProps[];
+    results: PokemonProps[];
   }>();
+
+  const [customPokemonList, setCustomPokemonList] = useState<PokemonProps[]>(
+    [],
+  );
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [customPokemonId, setCustomPokemonId] = useState<string>();
 
   useEffect(() => {
     if (!pokemonList) {
-      getAllPokemons({}).then(res => setPokemonList(res));
+      getAllPokemons().then(res => setPokemonList(res));
     }
   }, [pokemonList]);
 
-  const [searchParams, setSearchParams] = useSearchParams({});
+  let customPokemonSelected;
 
-  useEffect(() => {
-    const limit = searchParams.get("limit");
-    const offset = searchParams.get("offset");
-
-    if (limit && offset) {
-      getAllPokemons({ offset, limit }).then(res => setPokemonList(res));
-    }
-  }, [searchParams]);
+  if (customPokemonId) {
+    customPokemonSelected = customPokemonList.find(
+      ({ name }) => name === customPokemonId,
+    );
+  }
 
   if (!pokemonList) {
     return null;
   }
 
-  const { results, previous: previousPage, next: nextPage } = pokemonList;
+  const handleAddNewPokemon = (newPokemon: PokemonProps) => {
+    setCustomPokemonList([{ ...newPokemon }, ...customPokemonList]);
+  };
+
+  const { results } = pokemonList;
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Pokemons</h1>
-      </header>
-      <div className="ListItemContainer">
-        {results.map(({ name, url }) => (
-          <ListItem key={name} name={name} url={url}></ListItem>
-        ))}
-      </div>
-      <div>
-        {previousPage && (
-          <button
-            onClick={() => setSearchParams(queryStringToObject(previousPage))}
-          >
-            Previus Page
-          </button>
-        )}
-        {nextPage && (
-          <button
-            onClick={() => setSearchParams(queryStringToObject(nextPage))}
-          >
-            Next Page
-          </button>
-        )}
-      </div>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <PokemonList
+            pokemonList={[...customPokemonList, ...results]}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            setCustomPokemonId={setCustomPokemonId}
+          />
+        }
+      />
+      <Route path="/:pokemonId/" element={<PokemonDetails />} />
+      <Route
+        path="/custom/"
+        element={<PokemonDetails customPokemon={customPokemonSelected} />}
+      />
+      <Route
+        path="/add/"
+        element={<AddPokemon onAddNewPokemon={handleAddNewPokemon} />}
+      />
+    </Routes>
   );
 };
 
