@@ -1,10 +1,10 @@
 import React from "react";
-import ListItem from "./mainList/ListItem";
-import AddImage from "./assets/add.png";
-import NextPageImage from "./assets/next.png";
-import PreviusPageImage from "./assets/previous.png";
+import ListItem from "./ListItem";
+import AddImage from "../assets/add.png";
+import NextPageImage from "../assets/next.png";
+import PreviusPageImage from "../assets/previous.png";
 import { useNavigate } from "react-router-dom";
-import { PokemonProps } from "./types";
+import { PokemonProps } from "../types";
 import { resultsPerPage } from "./MainPage";
 
 type PokemonListProps = {

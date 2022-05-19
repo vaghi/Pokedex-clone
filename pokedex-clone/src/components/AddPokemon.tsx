@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import "./CommonStyles.css";
+import "../CommonStyles.css";
 import "./AddPokemon.css";
-import CancelButton from "./assets/cancel.png";
-import ConfirmButton from "./assets/confirm.png";
+import CancelButton from "../assets/cancel.png";
+import ConfirmButton from "../assets/confirm.png";
 import { useEffect, useState } from "react";
-import { getAllAbilities, getAllItems, getAllTypes } from "./services";
+import { getAllAbilities, getAllItems, getAllTypes } from "../services";
 import { MultiSelect } from "react-multi-select-component";
-import { capitalize } from "./utils";
-import { Option, PokemonProps } from "./types";
+import { capitalize } from "../utils";
+import { Option, PokemonProps } from "../types";
 
 type PokemonDetailsProps = {
   onAddNewPokemon: (pokemon: PokemonProps) => void;

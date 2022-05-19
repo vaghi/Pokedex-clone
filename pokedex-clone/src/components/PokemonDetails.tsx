@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPokemonDetails } from "./services";
-import { PokemonProps } from "./types";
-import { capitalize } from "./utils";
+import { getPokemonDetails } from "../services";
+import { PokemonProps } from "../types";
+import { capitalize } from "../utils";
 import "./PokemonDetails.css";
-import "./CommonStyles.css";
-import BackButton from "./assets/back.png";
+import "../CommonStyles.css";
+import BackButton from "../assets/back.png";
 
 type PokemonDeTailsProps = {
   customPokemon?: PokemonProps;

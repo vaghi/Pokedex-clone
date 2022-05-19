@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./MainPage.css";
-import "./CommonStyles.css";
-import { getAllPokemons } from "./services";
-import { PokemonProps } from "./types";
+import "../CommonStyles.css";
+import { getAllPokemons } from "../services";
+import { PokemonProps } from "../types";
 import { Route, Routes } from "react-router-dom";
 import PokemonList from "./PokemonList";
 import AddPokemon from "./AddPokemon";
