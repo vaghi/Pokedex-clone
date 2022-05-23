@@ -8,19 +8,26 @@ import { PokemonProps } from "../types";
 import { resultsPerPage } from "./MainPage";
 
 type PokemonListProps = {
+  count: number;
   pokemonList: PokemonProps[];
+  customPokemonList: PokemonProps[];
   currentPage: number;
   setCurrentPage: (page: number) => void;
   setCustomPokemonId: (customPokemonId: string) => void;
 };
 
 const PokemonList = ({
+  count,
   pokemonList,
+  customPokemonList,
   currentPage,
   setCurrentPage,
   setCustomPokemonId,
 }: PokemonListProps) => {
   const navigate = useNavigate();
+
+  const startIndexPage = resultsPerPage * currentPage;
+  const endIndexPage = resultsPerPage * (currentPage + 1);
 
   return (
     <div className="MainPage">
@@ -44,7 +51,8 @@ const PokemonList = ({
             <img width="32" src={AddImage} onClick={() => navigate("/add/")} />
           </div>
           <div className="NextPageButton PageButton">
-            {currentPage < pokemonList.length / resultsPerPage && (
+            {currentPage <
+              (count + customPokemonList.length) / resultsPerPage && (
               <img
                 width="32"
                 src={NextPageImage}
@@ -56,15 +64,23 @@ const PokemonList = ({
           </div>
         </div>
         <>
-          {pokemonList
-            .slice(
-              currentPage * resultsPerPage,
-              Math.min(
-                (currentPage + 1) * resultsPerPage,
-                pokemonList.length - 1,
-              ),
-            )
-            .map(pokemon => (
+          {customPokemonList.length > startIndexPage &&
+            customPokemonList
+              .slice(
+                startIndexPage,
+                Math.min(endIndexPage, customPokemonList.length),
+              )
+              .map(pokemon => (
+                <ListItem
+                  key={pokemon.name}
+                  name={pokemon.name}
+                  custom={pokemon.custom}
+                  setCustomPokemonId={setCustomPokemonId}
+                />
+              ))}
+          {(!customPokemonList.length ||
+            customPokemonList.length % resultsPerPage !== 0) &&
+            pokemonList.map(pokemon => (
               <ListItem
                 key={pokemon.name}
                 name={pokemon.name}

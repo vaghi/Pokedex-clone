@@ -1,9 +1,20 @@
 const baseApi = "https://pokeapi.co/api/v2/";
 
-export const getAllPokemons = async () => {
-  const response = await fetch(`${baseApi}pokemon?offset=0&limit=10000`, {
-    method: "GET",
-  });
+type getAllPokemonsProps = {
+  offset?: number;
+  limit?: number;
+};
+
+export const getAllPokemons = async ({
+  offset = 0,
+  limit = 20,
+}: getAllPokemonsProps) => {
+  const response = await fetch(
+    `${baseApi}pokemon?offset=${offset}&limit=${limit}`,
+    {
+      method: "GET",
+    },
+  );
   return await response.json();
 };
 

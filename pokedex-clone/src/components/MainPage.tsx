@@ -13,7 +13,8 @@ export const resultsPerPage = 20;
 const MainPage = ({}) => {
   const [pokemonList, setPokemonList] = useState<{
     results: PokemonProps[];
-  }>();
+    count: number;
+  }>({ results: [], count: 0 });
 
   const [customPokemonList, setCustomPokemonList] = useState<PokemonProps[]>(
     [],
@@ -22,10 +23,41 @@ const MainPage = ({}) => {
   const [customPokemonId, setCustomPokemonId] = useState<string>();
 
   useEffect(() => {
-    if (!pokemonList) {
-      getAllPokemons().then(res => setPokemonList(res));
+    let offset: number;
+    let limit: number;
+
+    const startIndex = currentPage * resultsPerPage;
+    const endIndex = (currentPage + 1) * resultsPerPage;
+    if (!customPokemonList.length) {
+      offset = startIndex;
+      limit = resultsPerPage;
+    } else {
+      if (
+        startIndex <= customPokemonList.length &&
+        customPokemonList.length <= endIndex
+      ) {
+        offset = 0;
+        limit = resultsPerPage - (customPokemonList.length % resultsPerPage);
+      } else if (
+        pokemonList.results.length &&
+        customPokemonList.length >= endIndex
+      ) {
+        return;
+      } else {
+        const customPages = Math.floor(
+          customPokemonList.length / resultsPerPage,
+        );
+        offset =
+          (currentPage - customPages - 1) * resultsPerPage +
+          (resultsPerPage - (customPokemonList.length % resultsPerPage));
+        limit = 20;
+      }
     }
-  }, [pokemonList]);
+
+    getAllPokemons({ offset, limit }).then(res => {
+      setPokemonList(res);
+    });
+  }, [currentPage, customPokemonList.length]);
 
   let customPokemonSelected;
 
@@ -43,7 +75,7 @@ const MainPage = ({}) => {
     setCustomPokemonList([{ ...newPokemon }, ...customPokemonList]);
   };
 
-  const { results } = pokemonList;
+  const { results, count } = pokemonList;
 
   return (
     <Routes>
@@ -51,7 +83,9 @@ const MainPage = ({}) => {
         path="/"
         element={
           <PokemonList
-            pokemonList={[...customPokemonList, ...results]}
+            pokemonList={results}
+            count={count}
+            customPokemonList={customPokemonList}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             setCustomPokemonId={setCustomPokemonId}
