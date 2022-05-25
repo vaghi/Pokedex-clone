@@ -18,6 +18,9 @@ Features:
     - Mandatory name, height and weight
     - Name can't be duplicated
 
-Tests not implemented yet
+TODO:
+ - Tests
+ - Add spinner on fetching data
 
-Run by `npm start`
+
+Run by `npm start` from _pokedex-clone_ folder
