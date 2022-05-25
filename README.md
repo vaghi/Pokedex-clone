@@ -14,7 +14,9 @@ Features:
     - height
     - weight
     - types
-  - Only restriction for creation is the mandatory fields name, height and weight
+  - Restriction for creation 
+    - Mandatory name, height and weight
+    - Name can't be duplicated
 
 Tests not implemented yet
 
