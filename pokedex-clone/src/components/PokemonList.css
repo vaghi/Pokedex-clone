@@ -1,8 +1,8 @@
-.MainPage {
+.PokemonList {
   text-align: center;
 }
 
-.MainPage-header {
+.PokemonListHeader {
   background-color: #282c34;
   display: flex;
   flex-direction: column;
@@ -12,18 +12,24 @@
   color: white;
 }
 
-.MainPageContainer {
+.PokemonListContainer {
   width: 50%;
   min-width: 200px;
   margin: auto;
   padding-bottom: 10px;
 }
 
-.MainPagePanel {
+.PokemonListPanel {
   height: 30px;
   padding-top: 8px;
   display: flex;
   justify-content: space-between;
+}
+
+.NoPokemonMessage {
+  line-height: 100px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .AddPokemonButton {

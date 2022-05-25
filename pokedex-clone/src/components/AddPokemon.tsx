@@ -5,16 +5,34 @@ import "./AddPokemon.css";
 import CancelButton from "../assets/cancel.png";
 import ConfirmButton from "../assets/confirm.png";
 import { useEffect, useState } from "react";
-import { getAllAbilities, getAllItems, getAllTypes } from "../services";
+import {
+  getAllAbilities,
+  getAllItems,
+  getAllTypes,
+  getPokemonDetails,
+} from "../services";
 import { MultiSelect } from "react-multi-select-component";
 import { capitalize } from "../utils";
 import { Option, PokemonProps } from "../types";
+import {
+  DUPLICATED_NAME_ERROR,
+  HEIGHT_POSITIVE_VALUE_ERROR,
+  HEIGHT_REQUIRED_ERROR,
+  NAME_REQUIRED_ERROR,
+  POKEMON_NOT_FOUND_ERROR,
+  WEIGHT_POSITIVE_VALUE_ERROR,
+  WEIGHT_REQUIRED_ERROR,
+} from "../constants";
 
 type PokemonDetailsProps = {
   onAddNewPokemon: (pokemon: PokemonProps) => void;
+  customPokemons: PokemonProps[];
 };
 
-const PokemonDetails = ({ onAddNewPokemon }: PokemonDetailsProps) => {
+const PokemonDetails = ({
+  onAddNewPokemon,
+  customPokemons,
+}: PokemonDetailsProps) => {
   const [types, setTypes] = useState<Option[]>([]);
   const [abilities, setAbilities] = useState<Option[]>([]);
   const [items, setItems] = useState<Option[]>([]);
@@ -70,9 +88,9 @@ const PokemonDetails = ({ onAddNewPokemon }: PokemonDetailsProps) => {
   };
 
   // eslint-disable-next-line no-unused-vars
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setFormErrors(validate(formValues));
+    await validate(formValues).then(errors => setFormErrors(errors));
     setIsSubmit(true);
   };
 
@@ -100,26 +118,39 @@ const PokemonDetails = ({ onAddNewPokemon }: PokemonDetailsProps) => {
     }
   }, [isSubmit]);
 
-  const validate = (values: {
+  const validate = async (values: {
     name: string;
     height: number;
     weight: number;
   }) => {
     const errors: { name?: string; height?: string; weight?: string } = {};
     if (!values.name) {
-      errors.name = "Name is required!";
+      errors.name = NAME_REQUIRED_ERROR;
+    } else if (
+      customPokemons.some(
+        ({ name }) => values.name.toLowerCase() === name.toLowerCase(),
+      )
+    ) {
+      errors.name = DUPLICATED_NAME_ERROR;
+    } else {
+      await getPokemonDetails(values.name.toLowerCase()).then(res => {
+        if (!(res.error === POKEMON_NOT_FOUND_ERROR)) {
+          errors.name = DUPLICATED_NAME_ERROR;
+        }
+      });
     }
+
     if (!values.height) {
-      errors.height = "Height is required!";
+      errors.height = HEIGHT_REQUIRED_ERROR;
     }
     if (values.height <= 0) {
-      errors.height = "Height must be a positive number!";
+      errors.height = HEIGHT_POSITIVE_VALUE_ERROR;
     }
     if (!values.weight) {
-      errors.height = "Height is required!";
+      errors.weight = WEIGHT_REQUIRED_ERROR;
     }
     if (values.weight <= 0) {
-      errors.weight = "Weight must be a positive number!";
+      errors.weight = WEIGHT_POSITIVE_VALUE_ERROR;
     }
 
     return errors;

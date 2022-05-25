@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./MainPage.css";
 import "../CommonStyles.css";
 import { getAllPokemons } from "../services";
 import { PokemonProps } from "../types";
@@ -7,8 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import PokemonList from "./PokemonList";
 import AddPokemon from "./AddPokemon";
 import PokemonDetails from "./PokemonDetails";
-
-export const resultsPerPage = 20;
+import { RESULTS_PER_PAGE } from "../constants";
 
 const MainPage = ({}) => {
   const [pokemonList, setPokemonList] = useState<{
@@ -26,18 +24,19 @@ const MainPage = ({}) => {
     let offset: number;
     let limit: number;
 
-    const startIndex = currentPage * resultsPerPage;
-    const endIndex = (currentPage + 1) * resultsPerPage;
+    const startIndex = currentPage * RESULTS_PER_PAGE;
+    const endIndex = (currentPage + 1) * RESULTS_PER_PAGE;
     if (!customPokemonList.length) {
       offset = startIndex;
-      limit = resultsPerPage;
+      limit = RESULTS_PER_PAGE;
     } else {
       if (
         startIndex <= customPokemonList.length &&
         customPokemonList.length <= endIndex
       ) {
         offset = 0;
-        limit = resultsPerPage - (customPokemonList.length % resultsPerPage);
+        limit =
+          RESULTS_PER_PAGE - (customPokemonList.length % RESULTS_PER_PAGE);
       } else if (
         pokemonList.results.length &&
         customPokemonList.length >= endIndex
@@ -45,11 +44,11 @@ const MainPage = ({}) => {
         return;
       } else {
         const customPages = Math.floor(
-          customPokemonList.length / resultsPerPage,
+          customPokemonList.length / RESULTS_PER_PAGE,
         );
         offset =
-          (currentPage - customPages - 1) * resultsPerPage +
-          (resultsPerPage - (customPokemonList.length % resultsPerPage));
+          (currentPage - customPages - 1) * RESULTS_PER_PAGE +
+          (RESULTS_PER_PAGE - (customPokemonList.length % RESULTS_PER_PAGE));
         limit = 20;
       }
     }
@@ -65,10 +64,6 @@ const MainPage = ({}) => {
     customPokemonSelected = customPokemonList.find(
       ({ name }) => name === customPokemonId,
     );
-  }
-
-  if (!pokemonList) {
-    return null;
   }
 
   const handleAddNewPokemon = (newPokemon: PokemonProps) => {
@@ -99,7 +94,12 @@ const MainPage = ({}) => {
       />
       <Route
         path="/add/"
-        element={<AddPokemon onAddNewPokemon={handleAddNewPokemon} />}
+        element={
+          <AddPokemon
+            onAddNewPokemon={handleAddNewPokemon}
+            customPokemons={customPokemonList}
+          />
+        }
       />
     </Routes>
   );

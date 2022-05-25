@@ -1,11 +1,12 @@
 import React from "react";
 import ListItem from "./ListItem";
+import "./PokemonList.css";
 import AddImage from "../assets/add.png";
 import NextPageImage from "../assets/next.png";
 import PreviusPageImage from "../assets/previous.png";
 import { useNavigate } from "react-router-dom";
 import { PokemonProps } from "../types";
-import { resultsPerPage } from "./MainPage";
+import { RESULTS_PER_PAGE } from "../constants";
 
 type PokemonListProps = {
   count: number;
@@ -26,16 +27,19 @@ const PokemonList = ({
 }: PokemonListProps) => {
   const navigate = useNavigate();
 
-  const startIndexPage = resultsPerPage * currentPage;
-  const endIndexPage = resultsPerPage * (currentPage + 1);
+  const startIndexPage = RESULTS_PER_PAGE * currentPage;
+  const endIndexPage = RESULTS_PER_PAGE * (currentPage + 1);
 
   return (
-    <div className="MainPage">
-      <header className="MainPage-header">
+    <div className="PokemonList">
+      <header className="PokemonListHeader">
         <h1>Pokemons</h1>
       </header>
-      <div className="MainPageContainer">
-        <div className="MainPagePanel">
+      <div
+        className="PokemonListContainer"
+        data-testid="pokemon-list-container"
+      >
+        <div className="PokemonListPanel">
           <div className="PreviousPageButton PageButton">
             {currentPage > 0 && (
               <img
@@ -52,7 +56,7 @@ const PokemonList = ({
           </div>
           <div className="NextPageButton PageButton">
             {currentPage <
-              (count + customPokemonList.length) / resultsPerPage && (
+              (count + customPokemonList.length) / RESULTS_PER_PAGE && (
               <img
                 width="32"
                 src={NextPageImage}
@@ -79,7 +83,7 @@ const PokemonList = ({
                 />
               ))}
           {(!customPokemonList.length ||
-            customPokemonList.length % resultsPerPage !== 0) &&
+            customPokemonList.length % RESULTS_PER_PAGE !== 0) &&
             pokemonList.map(pokemon => (
               <ListItem
                 key={pokemon.name}
@@ -88,6 +92,9 @@ const PokemonList = ({
                 setCustomPokemonId={setCustomPokemonId}
               />
             ))}
+          {pokemonList.length === 0 && customPokemonList.length === 0 && (
+            <div className="NoPokemonMessage">{`Sorry, we don't have any Pokemon to show`}</div>
+          )}
         </>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { POKEMON_NOT_FOUND_ERROR } from "./constants";
 const baseApi = "https://pokeapi.co/api/v2/";
 
 type getAllPokemonsProps = {
@@ -22,7 +23,12 @@ export const getPokemonDetails = async (pokemonId: string) => {
   const response = await fetch(`${baseApi}pokemon/${pokemonId}/`, {
     method: "GET",
   });
-  return await response.json();
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    return { error: POKEMON_NOT_FOUND_ERROR };
+  }
 };
 
 export const getAllTypes = async () => {
