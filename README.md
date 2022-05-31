@@ -2,7 +2,7 @@
 
 Frontend app listing all the pokemons using the api https://pokeapi.co/
 
-Features:
+### Features:
   - Paginated by 20
   - Able to add new pokemons
     - New pokemons will be added at the beggining of the list for easy finding
@@ -14,8 +14,18 @@ Features:
     - height
     - weight
     - types
-  - Only restriction for creation is the mandatory fields name, height and weight
+  - Restriction for creation 
+    - Mandatory name, height and weight
+    - Name can't be duplicated
 
-Tests not implemented yet
+### TODO:
+ - Tests
+ - Add spinner on fetching data
+ - Handle errors
 
-Run by `npm start`
+### Known bugs to solve:
+ - Mouse pointer on hidden pagination buttons
+ - Twice initial fetch
+ - Form sumbit problem on fields errros solved
+
+Run by `npm start` from _pokedex-clone_ folder
