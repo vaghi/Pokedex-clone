@@ -1,4 +1,6 @@
 export const RESULTS_PER_PAGE = 20;
+export const EMPTY_POKEMON_LIST_MESSAGE =
+  "Sorry, we don't have any Pokemon to show";
 
 export const POKEMON_NOT_FOUND_ERROR = "Pokemon not found!";
 export const DUPLICATED_NAME_ERROR = "Name duplicated!";

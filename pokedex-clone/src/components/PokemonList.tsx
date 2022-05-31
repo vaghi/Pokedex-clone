@@ -6,9 +6,9 @@ import NextPageImage from "../assets/next.png";
 import PreviusPageImage from "../assets/previous.png";
 import { useNavigate } from "react-router-dom";
 import { PokemonProps } from "../types";
-import { RESULTS_PER_PAGE } from "../constants";
+import { EMPTY_POKEMON_LIST_MESSAGE, RESULTS_PER_PAGE } from "../constants";
 
-type PokemonListProps = {
+export type PokemonListProps = {
   count: number;
   pokemonList: PokemonProps[];
   customPokemonList: PokemonProps[];
@@ -48,21 +48,30 @@ const PokemonList = ({
                 onClick={() => {
                   setCurrentPage(currentPage - 1);
                 }}
+                data-testid="previous-page-button"
               />
             )}
           </div>
           <div className="AddPokemonButton PageButton">
-            <img width="32" src={AddImage} onClick={() => navigate("/add/")} />
+            <img
+              width="32"
+              src={AddImage}
+              onClick={() => navigate("/add/")}
+              data-testid="add-new-pokemon-button"
+            />
           </div>
           <div className="NextPageButton PageButton">
             {currentPage <
-              (count + customPokemonList.length) / RESULTS_PER_PAGE && (
+              Math.floor(
+                (count + customPokemonList.length) / RESULTS_PER_PAGE,
+              ) && (
               <img
                 width="32"
                 src={NextPageImage}
                 onClick={() => {
                   setCurrentPage(currentPage + 1);
                 }}
+                data-testid="next-page-button"
               />
             )}
           </div>
@@ -93,7 +102,7 @@ const PokemonList = ({
               />
             ))}
           {pokemonList.length === 0 && customPokemonList.length === 0 && (
-            <div className="NoPokemonMessage">{`Sorry, we don't have any Pokemon to show`}</div>
+            <div className="NoPokemonMessage">{EMPTY_POKEMON_LIST_MESSAGE}</div>
           )}
         </>
       </div>
