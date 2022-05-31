@@ -21,5 +21,11 @@ Frontend app listing all the pokemons using the api https://pokeapi.co/
 ### TODO:
  - Tests
  - Add spinner on fetching data
+ - Handle errors
+
+### Known bugs to solve:
+ - Mouse pointer on hidden pagination buttons
+ - Twice initial fetch
+ - Form sumbit problem on fields errros solved
 
 Run by `npm start` from _pokedex-clone_ folder
